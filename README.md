@@ -17,7 +17,7 @@ Bitcoin price is queried from Bitso.
 
 ## Set your access token in your environment
 ```
-(env)$ ➜ export ACCESS_TOKEN=your_access_token
+(env)$ ➜ export CBTR_API_KEY=your_access_token
 ```
 
 ## Launch Bitcoin price publisher
