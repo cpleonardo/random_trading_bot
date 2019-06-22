@@ -103,25 +103,16 @@ class Trading():
         self.subscriber.daemon = False 
         self.connection.close()
 
-# seller_bots = [
-#     Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='sell')] * 3
-# buyer_bots = [
-#     Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='buy')] * 3
+# You can create as many Trading objects as you need
 bot1 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='sell')
 bot2 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='buy')
 
 bot1.start()
 bot2.start()
 try:
-    # [bot.start() for bot in seller_bots]
-    # [bot.start() for bot in buyer_bots]
     while True:
         time.sleep(10)
 except:
-    # for bot in seller_bots:
-    #     bot.kill()
-    # for bot in buyer_bots:
-    #     bot.kill()
     bot1.kill()
     bot2.kill()
     print('Bye--Bye!')
