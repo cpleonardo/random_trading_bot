@@ -4,7 +4,6 @@ Random trading bot for placing and cancelling limit orders
 Bitcoin price is queried from Bitso.
 
 ## Requirements
-* [RabbitMQ Server](https://www.rabbitmq.com/)
 * Python 3
 * [Virtualenv >16.1.0](https://virtualenv.pypa.io/en/latest/)
 
@@ -18,11 +17,6 @@ Bitcoin price is queried from Bitso.
 ## Set your access token in your environment
 ```
 (env)$ ➜ export CBTR_API_KEY=your_access_token
-```
-
-## Launch Bitcoin price publisher
-```
-(env)$ ➜ python3 btc_price_pub.py
 ```
 
 ## Launch "bot"
