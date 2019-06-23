@@ -68,7 +68,7 @@ class Trading():
             if self.side == 'buy':
                 price = float(self.bid) - price_inc
             else:
-                price = float(self.ask) + price_inc
+                price = float(self.ask)*1.01 + price_inc
             amount_inc = round(random.uniform(-0.001, 0.001), 8)
             amount = self.base_amount + amount_inc
             order_id = self.place_order(
@@ -84,7 +84,7 @@ class Trading():
         self.order_placer.daemon = False
 
 # You can create as many Trading objects as you need
-bot1 = Trading(book='btc_mxn', delta_time=3, base_amount=0.01, side='sell')
+bot1 = Trading(book='btc_mxn', delta_time=10, base_amount=0.1, side='sell')
 bot2 = Trading(book='btc_mxn', delta_time=3, base_amount=0.01, side='sell')
 
 bot1.start()
