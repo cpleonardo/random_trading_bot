@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 
-import json, time, requests, threading, random, pika, os
+import json
+import time
+import requests
+import threading
+import random
+import pika
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 class Trading():
-    BITSO_ORDER_BOOK = "https://api.bitso.com/v3/ticker/"
-    BASE_URL = 'https://api.staging.coinbtr.com/api/v1/trading/'
+    BITSO_ORDER_BOOK = os.environ.get('BITSO_ORDER_BOOK')
+    BASE_URL = os.environ.get('BASE_URL')
+    HOST = os.environ.get('HOST')
     ACCESS_TOKEN = os.environ.get('CBTR_API_KEY')
 
     def __init__(self, book, delta_time, base_amount, side):
@@ -17,7 +26,7 @@ class Trading():
         self.order_placer = threading.Thread(target=self.bot)
         self.subscriber = threading.Thread(target=self.subscribe_price)
         self.connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost'))
+            pika.ConnectionParameters(host=self.HOST))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=f'{self.book}_price')
         self.channel.basic_consume(queue=f'{self.book}_price',
@@ -100,8 +109,9 @@ class Trading():
 
     def kill(self):
         self.order_placer.daemon = False
-        self.subscriber.daemon = False 
+        self.subscriber.daemon = False
         self.connection.close()
+
 
 # You can create as many Trading objects as you need
 bot1 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='sell')
