@@ -8,26 +8,45 @@ Bitcoin price is queried from Bitso.
 * Python 3
 * [Virtualenv >16.1.0](https://virtualenv.pypa.io/en/latest/)
 
-## Create virtual environment
-```
-      $ ➜ virtualenv -p python3 env
-      $ ➜ source env/bin/activate
- (env)$ ➜ pip install -r requirements.txt
+## Install RabbitMQ Server
+```sh
+      $ ➜ docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
 ```
 
-## Set your access token in your environment
+## Install VirtualEnv
+```sh
+      $ ➜ sudo apt install python3-venv
 ```
-(env)$ ➜ export CBTR_API_KEY=your_access_token
+
+## Create virtual environment
+```sh
+      $ ➜ python3 -m venv env
+      $ ➜ source env/bin/activate
+      (env) $ ➜ pip install -r requirements.txt
+```
+
+## Copy .env.example to .env and Edit
+```sh
+   cp .env.example .env
 ```
 
 ## Launch Bitcoin price publisher
 ```
-(env)$ ➜ python3 btc_price_pub.py
+(env)$ ➜ python btc_price_pub.py
 ```
+or
+```
+(env)$ ➜ ./btc_price_pub.py
+```
+
 
 ## Launch "bot"
 Open another terminal and source the python virtual environment.
 ```
-(env)$ ➜ python3 trading_bot.py
+(env)$ ➜ python trading_bot.py
+```
+or
+```
+(env)$ ➜ ./trading_bot.py
 ```
 
