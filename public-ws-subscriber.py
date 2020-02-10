@@ -10,7 +10,14 @@ def connect():
 
 @sio.on('message')
 def message_handler(data):
-    print('message received with ', data)
+    if data['channel'] == 'orderbook':
+        orderbook = data['data']
+        print(f"Received {MARKET} orderbook")
+        print(orderbook)
+    elif data['channel'] == 'trades':
+        trades = data['data']
+        print(f"Received {MARKET} trades")
+        print(trades)
 
 @sio.event
 def disconnect():
