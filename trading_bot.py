@@ -107,8 +107,8 @@ class Trading():
 
 
 # You can create as many Trading objects as you need
-bot1 = Trading(book='bch_mxn', delta_time=1, base_amount=0.01, side='sell')
-bot2 = Trading(book='bch_mxn', delta_time=1, base_amount=0.01, side='buy')
+bot1 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='sell')
+bot2 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='buy')
 
 bot1.start()
 bot2.start()
