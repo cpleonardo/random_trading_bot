@@ -8,14 +8,17 @@ import random
 import pika
 import os
 from dotenv import load_dotenv
+from tauros_api import TaurosAPI
+
+
 load_dotenv()
+tauros = TaurosAPI(os.environ.get('TAUROS_API_KEY'), os.environ.get('TAUROS_SECRET'), staging=True)
 
 
 class Trading():
     BITSO_ORDER_BOOK = os.environ.get('BITSO_ORDER_BOOK')
-    BASE_URL = os.environ.get('BASE_URL')
     HOST = os.environ.get('HOST')
-    ACCESS_TOKEN = os.environ.get('CBTR_API_KEY')
+    API_VERSION = 'api/v1/'
 
     def __init__(self, book, delta_time, base_amount, side):
         self.book = book
@@ -40,10 +43,6 @@ class Trading():
         print(" [x] Received %r" % message)
 
     def place_order(self, amount, price, side, type='limit'):
-        headers = {
-            'Authorization': f'Token {self.ACCESS_TOKEN}',
-            'Content-Type': 'application/json',
-        }
         body = {
             'amount': amount,
             'price': price,
@@ -51,31 +50,25 @@ class Trading():
             'type': type,
             'side': self.side,
         }
-        response = requests.post(
-            url=self.BASE_URL+'placeorder/',
-            headers=headers,
-            data=json.dumps(body),
-        )
         try:
-            print(response.content)
-            return response.json()['data']['id']
-        except:
+            response = tauros.post(
+                path='/{}trading/placeorder/'.format(self.API_VERSION),
+                data=body,
+            )
+            print(response.body.get('msg'))
+            return response.body.get('data').get('id')
+        except Exception as e:
+            print(e)
             return 0
 
     def close_order(self, order_id):
-        headers = {
-            'Authorization': f'Token {self.ACCESS_TOKEN}',
-            'Content-Type': 'application/json',
-        }
-        body = {
-            'id': order_id,
-        }
-        response = requests.post(
-            url=self.BASE_URL+'closeorder/',
-            headers=headers,
-            data=json.dumps(body),
+        response = tauros.post(
+            path='/{}trading/closeorder/'.format(self.API_VERSION),
+            data={
+                'id': order_id,
+            },
         )
-        print(response.json())
+        print("{} Id -> {}".format(response.body.get('msg'), order_id) )
 
     def get_bitso_ticker(self):
         response = requests.get(self.BITSO_ORDER_BOOK + f"?book={self.book}")
@@ -114,8 +107,8 @@ class Trading():
 
 
 # You can create as many Trading objects as you need
-bot1 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='sell')
-bot2 = Trading(book='btc_mxn', delta_time=1, base_amount=0.001, side='buy')
+bot1 = Trading(book='bch_mxn', delta_time=1, base_amount=0.01, side='sell')
+bot2 = Trading(book='bch_mxn', delta_time=1, base_amount=0.01, side='buy')
 
 bot1.start()
 bot2.start()

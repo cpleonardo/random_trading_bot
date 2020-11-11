@@ -7,3 +7,4 @@ python-dotenv==0.10.5
 requests==2.22.0
 urllib3==1.25.8
 python-socketio==4.4.0
+tauros-api==1.5.2
